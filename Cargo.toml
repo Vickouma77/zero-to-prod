@@ -1,8 +1,18 @@
 [package]
 name = "zero2prod"
 version = "0.1.0"
+authors = ["Vickouma77 <Vickprestone20@gmail.com>"]
 edition = "2024"
+
+[[bin]]
+path = "src/main.rs"
+name = "zero2prod"
+
+[lib]
+path = "src/lib.rs"
+
 
 [dependencies]
 actix-web = "4.9.0"
-tokio = {version = "1.43.0", features = ["macros", "rt-multi-thread"]}
+tokio = {version = "1.43.0", features = ["macros", "rt-multi-thread", "rt"]}
+reqwest = {version = "0.12.12"}
