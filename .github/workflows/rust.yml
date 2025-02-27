@@ -25,6 +25,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
           POSTGRES_DB: postgres
+          SQLX_OFFLINE: false
         ports:
           - 5432:5432
     steps:
