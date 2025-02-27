@@ -56,7 +56,7 @@ jobs:
       - name: Run tests
         run: cargo test
         env:
-          SQLX_OFFLINE: false
+          SQLX_OFFLINE: true
 
       - name: Check that queries are fresh
         run: cargo sqlx prepare --workspace --check -- --all-targets
