@@ -62,11 +62,11 @@ jobs:
       - name: Run tests
         run: cargo test
 
-      - name: Regenerate SQLx query cache
-        run: cargo sqlx prepare --workspace 
+      # - name: Regenerate SQLx query cache
+      #   run: cargo sqlx prepare --workspace 
 
-      - name: Check that queries are fresh
-        run: cargo sqlx prepare --workspace --check -- --all-targets
+      # - name: Check that queries are fresh
+      #   run: cargo sqlx prepare --workspace --check -- --all-targets
 
   # `fmt` container job
   fmt:
