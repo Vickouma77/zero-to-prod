@@ -27,52 +27,55 @@ jobs:
           POSTGRES_DB: postgres
         ports:
           - 5432:5432
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
     steps:
-      - name: check out repository
+      - name: Check out repository code
         uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
+      - name: Install the Rust toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+
       - name: Install sqlx-cli
-        run: cargo install sqlx-cli
+        run:
+          cargo install sqlx-cli
           --version=${{ env.SQLX_VERSION }}
           --features ${{ env.SQLX_FEATURES }}
           --no-default-features
           --locked
+
       - name: Create app user in Postgres
         run: |
           sudo apt-get install postgresql-client
-
           # Create the application user
           CREATE_QUERY="CREATE USER ${APP_USER} WITH PASSWORD '${APP_USER_PWD}';"
           PGPASSWORD="password" psql -U "postgres" -h "localhost" -c "${CREATE_QUERY}"
-
           # Grant create db privileges to the app user
           GRANT_QUERY="ALTER USER ${APP_USER} CREATEDB;"
           PGPASSWORD="password" psql -U "postgres" -h "localhost" -c "${GRANT_QUERY}"
-
       - name: Migrate database
-        run: SKIP_DOCKER=true ./scripts/init_db.sh
-
+        run: |
+          SKIP_DOCKER=true ./scripts/init_db.sh
       - name: Run tests
         run: cargo test
-        env:
-          SQLX_OFFLINE: false
 
       - name: Check that queries are fresh
         run: cargo sqlx prepare --workspace --check -- --all-targets
 
-  
+  # `fmt` container job
   fmt:
     name: Rustfmt
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - name: Install the Rust toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           components: rustfmt
-      - name: Formatting
-        run: cargo fmt -- --check
-    
+      - name: Enforce formatting
+        run: cargo fmt --check
+
   clippy:
     name: Clippy
     runs-on: ubuntu-latest
@@ -80,10 +83,10 @@ jobs:
       SQLX_OFFLINE: true
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - name: Install the Rust toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           components: clippy
-      - uses: Swatinem/rust-cache@v2
       - name: Linting
         run: cargo clippy -- -D warnings
 
@@ -99,6 +102,10 @@ jobs:
           POSTGRES_DB: postgres
         ports:
           - 5432:5432
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
     steps:
       - uses: actions/checkout@v4
       - name: Install the Rust toolchain
@@ -114,11 +121,9 @@ jobs:
       - name: Create app user in Postgres
         run: |
           sudo apt-get install postgresql-client
-
           # Create the application user
           CREATE_QUERY="CREATE USER ${APP_USER} WITH PASSWORD '${APP_USER_PWD}';"
           PGPASSWORD="password" psql -U "postgres" -h "localhost" -c "${CREATE_QUERY}"
-
           # Grant create db privileges to the app user
           GRANT_QUERY="ALTER USER ${APP_USER} CREATEDB;"
           PGPASSWORD="password" psql -U "postgres" -h "localhost" -c "${GRANT_QUERY}"
@@ -134,12 +139,3 @@ jobs:
         with:
           name: "Coverage report"
           path: coverage/
-          
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
