@@ -1,3 +1,4 @@
+use env_logger::Env;
 use sqlx::PgPool;
 use std::net::TcpListener;
 use zero2prod::configuration::get_configurations;
@@ -5,6 +6,9 @@ use zero2prod::startup::run;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
+    // Initialize the logger
+    env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
+    
     // Read the configuration file
     let configuration = get_configurations().expect("Failed to read configurations");
 
