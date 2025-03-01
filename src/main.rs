@@ -8,7 +8,7 @@ use zero2prod::startup::run;
 async fn main() -> std::io::Result<()> {
     // Initialize the logger
     env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
-    
+
     // Read the configuration file
     let configuration = get_configurations().expect("Failed to read configurations");
 
