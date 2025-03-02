@@ -27,7 +27,7 @@ pub async fn subscribe(form: web::Form<FormData>, pool: web::Data<PgPool>) -> Ht
         Ok(_) => {
             log::info!("Saved new subscriber details in the database");
             HttpResponse::Ok().finish()
-        },
+        }
         Err(e) => {
             log::error!("Failed to execute query: {:?}", e);
             HttpResponse::InternalServerError().finish()
