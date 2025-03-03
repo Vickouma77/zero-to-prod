@@ -30,4 +30,5 @@ sqlx = {version = "0.8.3", features = [
     "migrate",
 ]}
 tokio = {version = "1.43.0", features = ["macros", "rt-multi-thread", "rt"]}
+tracing = {version = "0.1.41", features = ["log"]}
 uuid = {version = "1.15.1", features = ["v4"]}
