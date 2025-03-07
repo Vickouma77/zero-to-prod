@@ -17,4 +17,4 @@ jobs:
         run: ls -la .cargo && cat .cargo/deny.toml || echo "deny.toml not found"
 
       - name: Scan for vulnerabilities
-        run: cargo deny check --config .cargo/deny.toml check advisories
+        run: cargo deny check --config .cargo/deny.toml advisories
