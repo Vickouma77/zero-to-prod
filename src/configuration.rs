@@ -1,3 +1,5 @@
+// Module: configuration
+
 use secrecy::{ExposeSecret, SecretBox};
 
 #[derive(serde::Deserialize)]

@@ -1,3 +1,5 @@
+// This is the entry point of the application
+
 use secrecy::ExposeSecret;
 use sqlx::PgPool;
 use std::net::TcpListener;
