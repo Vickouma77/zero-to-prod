@@ -24,7 +24,7 @@ ENV SQLX_OFFLINE true
 RUN cargo build --release --bin zero2prod
 
 # Runtime stage
-FROM debian:bullseye-slim AS runtime
+FROM debian:bookworm-slim AS runtime
 WORKDIR /app
 # Install OpenSSL - it is dynamically linked by some of our dependencies
 # Install ca-certificates - it is needed to verify TLS certificates
