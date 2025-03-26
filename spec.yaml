@@ -9,7 +9,7 @@ services:
     github:
       branch: master
       # Deploy a new version on every commit to `master`!
-      # Continuous Deployment, here we come!
+      # Continuous Deployment, here we come!  
       deploy_on_push: true
       repo: Vickouma77/zero-to-prod
 
@@ -46,6 +46,6 @@ databases:
     name: newsletter
     # Again, let's keep the bill lean
     num_nodes: 1
-    size: db-s-dev-database
+    size: db-s-1vcpu-1gb
     # Postgres version - using the latest here
     version: "17"
