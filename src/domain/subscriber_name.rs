@@ -1,10 +1,5 @@
 use unicode_segmentation::UnicodeSegmentation;
 
-pub struct NewSubscriber {
-    pub email: String,
-    pub name: SubscriberName,
-}
-
 #[derive(Debug)]
 pub struct SubscriberName(String);
 
@@ -45,31 +40,6 @@ impl SubscriberName {
         } else {
             Ok(Self(s))
         }
-    }
-
-    // expose value by consuming the struct itself
-    pub fn inner(self) -> String {
-        // The caller gets the inner string,
-        // but they do not have a SubscriberName anymore!
-        // That's because `inner` takes `self` by value,
-        // consuming it according to move semantics
-        self.0
-    }
-
-    //expose the inner string as a mutable reference
-    pub fn inner_mut(&mut self) -> &mut str {
-        // The caller gets a mutable reference to the inner string.
-        // This allows them to perform *arbitrary* changes to
-        // value itself, potentially breaking our invariants!
-        &mut self.0
-    }
-
-    // The caller gets a shared reference to the inner string.
-    pub fn inner_ref(&self) -> &str {
-        // The caller gets a shared reference to the inner string.
-        // This gives the caller **read-only** access,
-        // they have no way to compromise our invariants!
-        &self.0
     }
 }
 
