@@ -1,4 +1,14 @@
-use validator::validate_email;
+use regex::Regex;
+use std::borrow::Cow;
+
+pub fn validate_email<'a, T>(val: T) -> bool
+where
+    T: Into<Cow<'a, str>>,
+{
+    let email: Cow<str> = val.into();
+    let email_regex = Regex::new(r"^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$").unwrap();
+    email_regex.is_match(&email)
+}
 
 #[derive(Debug)]
 pub struct SubscriberEmail(String);
