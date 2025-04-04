@@ -30,7 +30,6 @@ pub fn parse_subscriber(form: FormData) -> Result<NewSubscriber, String> {
     )
 )]
 pub async fn subscribe(form: web::Form<FormData>, pool: web::Data<PgPool>) -> HttpResponse {
-    
     let new_subscriber = match parse_subscriber(form.0) {
         Ok(subscriber) => subscriber,
         Err(_) => return HttpResponse::BadRequest().finish(),
@@ -81,7 +80,7 @@ pub async fn insert_subscriber(
         "#,
         Uuid::new_v4(),
         new_subscriber.email.as_ref(),
-        new_subscriber.name.as_ref(),   
+        new_subscriber.name.as_ref(),
         Utc::now()
     )
     .execute(pool)
