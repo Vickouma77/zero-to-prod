@@ -20,12 +20,17 @@ async fn main() -> std::io::Result<()> {
         .acquire_timeout(std::time::Duration::from_secs(2))
         .connect_lazy_with(configuration.database.with_db());
 
-    // Create the email client
     let sender_email = configuration
         .email_client
         .sender()
         .expect("Failed to parse sender email");
-    let email_client = EmailClient::new(configuration.email_client.base_url, sender_email);
+
+    // Create the email client
+    let email_client = EmailClient::new(
+        configuration.email_client.base_url,
+        sender_email,
+        configuration.email_client.authorization_token,
+    );
 
     // Bind the address
     let address = format!(
