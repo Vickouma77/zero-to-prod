@@ -81,6 +81,7 @@ mod tests {
             let result: Result<serde_json::Value, _> = serde_json::from_slice(&request.body);
 
             if let Ok(body) = result {
+                dbg!(&body);
                 body.get("from").is_some()
                     && body.get("To").is_some()
                     && body.get("Subject").is_some()
