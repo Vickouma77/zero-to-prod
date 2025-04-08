@@ -82,7 +82,7 @@ mod tests {
 
             if let Ok(body) = result {
                 dbg!(&body);
-                body.get("from").is_some()
+                body.get("From").is_some()
                     && body.get("To").is_some()
                     && body.get("Subject").is_some()
                     && body.get("HtmlBody").is_some()
