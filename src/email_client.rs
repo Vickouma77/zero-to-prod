@@ -110,7 +110,9 @@ mod tests {
             .mount(&mock_server)
             .await;
         // Act
-        let outcome = email_client.send_email(subscriber_email, &subject, &content, &content).await;
+        let outcome = email_client
+            .send_email(subscriber_email, &subject, &content, &content)
+            .await;
 
         // Assert
         assert_ok!(outcome);
