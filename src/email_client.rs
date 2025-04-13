@@ -15,8 +15,15 @@ impl EmailClient {
         sender: SubscriberEmail,
         authorization_token: SecretBox<String>,
     ) -> Self {
+        // Create a new HTTP client with a timeout of 10 seconds
+        let http_client = Client::builder()
+            .timeout(std::time::Duration::from_secs(10))
+            .build()
+            .unwrap();
+
+        // Set the base URL and sender email address
         Self {
-            http_client: Client::new(),
+            http_client,
             base_url,
             sender,
             authorization_token,
