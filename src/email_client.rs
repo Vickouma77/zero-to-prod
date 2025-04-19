@@ -14,12 +14,10 @@ impl EmailClient {
         base_url: String,
         sender: SubscriberEmail,
         authorization_token: SecretBox<String>,
+        timeout: std::time::Duration,
     ) -> Self {
         // Create a new HTTP client with a timeout of 10 seconds
-        let http_client = Client::builder()
-            .timeout(std::time::Duration::from_secs(10))
-            .build()
-            .unwrap();
+        let http_client = Client::builder().timeout(timeout).build().unwrap();
 
         // Set the base URL and sender email address
         Self {
@@ -102,7 +100,12 @@ mod tests {
 
     // Get a testinstance for `EmailClient`
     fn email_client(base_url: String) -> EmailClient {
-        EmailClient::new(base_url, email(), SecretBox::new(Faker.fake()))
+        EmailClient::new(
+            base_url,
+            email(),
+            SecretBox::new(Faker.fake()),
+            std::time::Duration::from_millis(200),
+        )
     }
 
     impl wiremock::Match for SendEmailBodyMatcher {
@@ -167,7 +170,7 @@ mod tests {
         let mock_server = MockServer::start().await;
         let email_client = email_client(mock_server.uri());
 
-        let response = ResponseTemplate::new(200).set_delay(std::time::Duration::from_secs(180));
+        let response = ResponseTemplate::new(200).set_delay(std::time::Duration::from_secs(10));
         Mock::given(any())
             .respond_with(response)
             .expect(1)

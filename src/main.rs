@@ -25,11 +25,14 @@ async fn main() -> std::io::Result<()> {
         .sender()
         .expect("Failed to parse sender email");
 
+    let timeout = configuration.email_client.timeout();
+
     // Create the email client
     let email_client = EmailClient::new(
         configuration.email_client.base_url,
         sender_email,
         configuration.email_client.authorization_token,
+        timeout,
     );
 
     // Bind the address
