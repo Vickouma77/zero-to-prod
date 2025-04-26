@@ -72,6 +72,7 @@ pub fn run(
             .route("/subscriptions", web::post().to(subscribe))
             .app_data(db_pool.clone())
             .app_data(email_client.clone())
+            .app_data(email_client.clone())
     })
     .listen(listener)?
     .run();
