@@ -108,7 +108,7 @@ async fn subscribe_sends_a_confirmation_email_for_valid_data() {
 async fn subscribe_sends_a_confirmation_email_with_a_link() {
     //Arrange
     let app = spawn_app().await;
-    let body  = "name=le%20guin&email=ursula_le_guin%40gmail.com";
+    let body = "name=le%20guin&email=ursula_le_guin%40gmail.com";
 
     // Mock the email server
     Mock::given(path("/email"))
