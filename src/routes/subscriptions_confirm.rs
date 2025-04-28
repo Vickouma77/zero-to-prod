@@ -1,11 +1,12 @@
 use actix_web::{HttpResponse, web};
 
 #[derive(serde::Deserialize)]
+#[allow(dead_code)]
 pub struct Parameters {
-    substriction_token: String,
+    subscription_token: String,
 }
 
-#[tracing::instrument(name = "Confirming a pending subscription", skip(_parameters))]
+#[tracing::instrument(name = "Confirm a pending subscriber", skip(_parameters))]
 pub async fn confirm(_parameters: web::Query<Parameters>) -> HttpResponse {
     HttpResponse::Ok().finish()
 }
