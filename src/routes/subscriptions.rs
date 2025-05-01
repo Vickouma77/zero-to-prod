@@ -1,12 +1,12 @@
 // Module for handling subscription requests
 
 use crate::email_client::EmailClient;
+use crate::startup::ApplicationBaseUrl;
 use actix_web::{HttpResponse, web};
 use chrono::Utc;
 use sqlx::PgPool;
 use unicode_segmentation::UnicodeSegmentation;
 use uuid::Uuid;
-use crate::startup::ApplicationBaseUrl;
 
 use crate::domain::{NewSubscriber, SubscriberEmail, SubscriberName};
 
@@ -49,7 +49,6 @@ pub async fn subscribe(
     if send_confirmation_email(&email_client, new_subscriber, &base_url.0)
         .await
         .is_err()
-    
     {
         return HttpResponse::InternalServerError().finish();
     }
