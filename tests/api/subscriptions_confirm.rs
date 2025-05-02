@@ -48,7 +48,7 @@ async fn clicking_on_the_confirmation_link_confirms_a_subscriber() {
         .respond_with(ResponseTemplate::new(200))
         .mount(&app.email_server)
         .await;
-    
+
     app.post_subscriptions(body.into()).await;
     let email_request = &app.email_server.received_requests().await.unwrap()[0];
     let confirmation_links = app.get_confirmation_links(&email_request);
@@ -65,7 +65,7 @@ async fn clicking_on_the_confirmation_link_confirms_a_subscriber() {
         .fetch_one(&app.db_pool)
         .await
         .expect("Failed to fetch saved subscription.");
-    
+
     assert_eq!(saved.email, "ursula_le_guin@gmail.com");
     assert_eq!(saved.name, "le guin");
     assert_eq!(saved.status, "confirmed");
