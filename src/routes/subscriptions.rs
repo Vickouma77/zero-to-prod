@@ -43,9 +43,9 @@ pub async fn subscribe(
         Err(_) => return HttpResponse::BadRequest().finish(),
     };
 
-    if insert_subscriber(&pool, &new_subscriber).await.is_err() {
-        return HttpResponse::InternalServerError().finish();
-    }
+    // if insert_subscriber(&pool, &new_subscriber).await.is_err() {
+    //     return HttpResponse::InternalServerError().finish();
+    // }
 
     let subscriber_id = match insert_subscriber(&pool, &new_subscriber).await {
         Ok(subscriber_id) => subscriber_id,
