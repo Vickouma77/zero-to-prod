@@ -102,8 +102,9 @@ impl ResponseError for SubscribeError {
             SubscribeError::PoolError(_)
             | SubscribeError::InsertSubscriberError(_)
             | SubscribeError::TransactionCommitError(_) => StatusCode::INTERNAL_SERVER_ERROR,
-            | SubscribeError::StoreTokenError(_)
-            | SubscribeError::SendEmailError(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            SubscribeError::StoreTokenError(_) | SubscribeError::SendEmailError(_) => {
+                StatusCode::INTERNAL_SERVER_ERROR
+            }
         }
     }
 }
@@ -147,13 +148,18 @@ pub async fn subscribe(
 
     let mut transaction = pool.begin().await.map_err(SubscribeError::PoolError)?;
 
-    let subscriber_id = insert_subscriber(&mut transaction, &new_subscriber).await.map_err(SubscribeError::InsertSubscriberError)?;
+    let subscriber_id = insert_subscriber(&mut transaction, &new_subscriber)
+        .await
+        .map_err(SubscribeError::InsertSubscriberError)?;
 
     let subscription_token = generate_subscription_token();
 
     store_token(&mut transaction, subscriber_id, &subscription_token).await?;
 
-    transaction.commit().await.map_err(SubscribeError::TransactionCommitError)?;
+    transaction
+        .commit()
+        .await
+        .map_err(SubscribeError::TransactionCommitError)?;
 
     send_confirmation_email(
         &email_client,
