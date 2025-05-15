@@ -35,7 +35,6 @@ pub fn parse_subscriber(form: FormData) -> Result<NewSubscriber, String> {
     Ok(NewSubscriber { email, name })
 }
 
-
 pub enum SubscribeError {
     ValidationError(String),
     DatabaseError(sqlx::Error),
