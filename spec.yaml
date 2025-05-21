@@ -10,7 +10,7 @@ services:
       branch: master
       # Deploy a new version on every commit to `master`!
       # Continuous Deployment, here we come!  
-      deploy_on_push: true
+      deploy_on_push: false
       repo: Vickouma77/zero-to-prod
 
     health_check:
