@@ -1,54 +1,54 @@
-#! spec.yaml
-name: zero2prod
+# #! spec.yaml
+# name: zero2prod
 
-region: blr1
-services:
-  - name: zero2prod
-    dockerfile_path: Dockerfile
-    source_dir: .
-    github:
-      branch: master
-      # Deploy a new version on every commit to `master`!
-      # Continuous Deployment, here we come!  
-      deploy_on_push: false
-      repo: Vickouma77/zero-to-prod
+# region: blr1
+# services:
+#   - name: zero2prod
+#     dockerfile_path: Dockerfile
+#     source_dir: .
+#     github:
+#       branch: master
+#       # Deploy a new version on every commit to `master`!
+#       # Continuous Deployment, here we come!  
+#       deploy_on_push: false
+#       repo: Vickouma77/zero-to-prod
 
-    health_check:
-      http_path: /health_check
-    # The port the application will be listening on for incoming requests
-    http_port: 8000
+#     health_check:
+#       http_path: /health_check
+#     # The port the application will be listening on for incoming requests
+#     http_port: 8000
 
-    instance_count: 1
-    instance_size_slug: basic-xxs
-    # All incoming requests should be routed to our app
-    routes:
-    - path: /
-    envs:
-      - key: APP_DATABASE__USERNAME
-        scope: RUN_TIME
-        value: ${newsletter.USERNAME}
-      - key: APP_DATABASE__PASSWORD
-        scope: RUN_TIME
-        value: ${newsletter.PASSWORD}
-      - key: APP_DATABASE__HOST
-        scope: RUN_TIME
-        value: ${newsletter.HOSTNAME}
-      - key: APP_DATABASE__PORT
-        scope: RUN_TIME
-        value: ${newsletter.PORT}
-      - key: APP_DATABASE__DATABASE_NAME
-        scope: RUN_TIME
-        value: ${newsletter.DATABASE}
-      - key: APP_APPLICATION__BASE_URL
-        scope: RUN_TIME
-        value: ${APP_URL}
-databases:
-    # PG = Postgres
-  - engine: PG
-    # Database name
-    name: newsletter
-    # Again, let's keep the bill lean
-    num_nodes: 1
-    size: db-s-1vcpu-1gb
-    # Postgres version - using the latest here
-    version: "17"
+#     instance_count: 1
+#     instance_size_slug: basic-xxs
+#     # All incoming requests should be routed to our app
+#     routes:
+#     - path: /
+#     envs:
+#       - key: APP_DATABASE__USERNAME
+#         scope: RUN_TIME
+#         value: ${newsletter.USERNAME}
+#       - key: APP_DATABASE__PASSWORD
+#         scope: RUN_TIME
+#         value: ${newsletter.PASSWORD}
+#       - key: APP_DATABASE__HOST
+#         scope: RUN_TIME
+#         value: ${newsletter.HOSTNAME}
+#       - key: APP_DATABASE__PORT
+#         scope: RUN_TIME
+#         value: ${newsletter.PORT}
+#       - key: APP_DATABASE__DATABASE_NAME
+#         scope: RUN_TIME
+#         value: ${newsletter.DATABASE}
+#       - key: APP_APPLICATION__BASE_URL
+#         scope: RUN_TIME
+#         value: ${APP_URL}
+# databases:
+#     # PG = Postgres
+#   - engine: PG
+#     # Database name
+#     name: newsletter
+#     # Again, let's keep the bill lean
+#     num_nodes: 1
+#     size: db-s-1vcpu-1gb
+#     # Postgres version - using the latest here
+#     version: "17"
