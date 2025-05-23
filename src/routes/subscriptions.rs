@@ -133,7 +133,7 @@ pub async fn store_token(
     )
     .execute(&mut **transaction)
     .await
-    .map_err(|e| StoreTokenError(e))?;
+    .map_err(StoreTokenError)?;
     Ok(())
 }
 
@@ -213,8 +213,7 @@ pub async fn insert_subscriber(
         Utc::now()
     )
     .execute(&mut **transaction)
-    .await
-    .map_err(|e| e)?;
+    .await?;
     Ok(subscriber_id)
 }
 
