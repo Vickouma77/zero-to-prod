@@ -2,14 +2,14 @@ use actix_web::{HttpResponse, web};
 
 #[derive(serde::Deserialize)]
 pub struct BodyData {
-    title: String,
-    content: Content,
+    _title: String,
+    _content: Content,
 }
 
 #[derive(serde::Deserialize)]
 pub struct Content {
-    text: String,
-    html: String,
+    _text: String,
+    _html: String,
 }
 
 pub async fn publish_newsletter(_body: web::Json<BodyData>) -> HttpResponse {
