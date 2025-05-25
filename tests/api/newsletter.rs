@@ -96,7 +96,7 @@ async fn newsletters_returns_400_for_invalid_data() {
             .send()
             .await
             .expect("Failed to execute request.");
-        
+
         // Assert
         assert_eq!(
             400,
