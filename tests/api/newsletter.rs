@@ -2,6 +2,42 @@ use crate::helpers::{ConfirmationLinks, TestApp, spawn_app};
 use wiremock::matchers::{any, method, path};
 use wiremock::{Mock, ResponseTemplate};
 
+async fn create_unconfirmed_subscriber(app: &TestApp) -> ConfirmationLinks {
+    let body = "name=le%20guin&email=ursula_le_guin%40gmail.com";
+    let _mock_guard = Mock::given(path("/email"))
+        .and(method("POST"))
+        .respond_with(ResponseTemplate::new(200))
+        .named("Create unconfirmed subscriber")
+        .expect(1)
+        .mount_as_scoped(&app.email_server)
+        .await;
+
+    app.post_subscriptions(body.into())
+        .await
+        .error_for_status()
+        .unwrap();
+
+    let email_request = &app
+        .email_server
+        .received_requests()
+        .await
+        .unwrap()
+        .pop()
+        .unwrap();
+    app.get_confirmation_links(&email_request)
+}
+
+async fn create_confirmed_subscriber(app: &TestApp) {
+    // We can then reuse the same helper and just add
+    // an extra step to actually call the confirmation link!
+    let confirmation_link = create_unconfirmed_subscriber(app).await;
+    reqwest::get(confirmation_link.html)
+        .await
+        .unwrap()
+        .error_for_status()
+        .unwrap();
+}
+
 #[tokio::test]
 async fn newsletters_are_not_delivered_to_unconfirmed_subscribers() {
     // Arrange
@@ -119,40 +155,4 @@ async fn requests_missing_authorization_are_rejected() {
         r#"Basic realm="publish""#,
         response.headers()["WWW-Authenticate"]
     );
-}
-
-async fn create_unconfirmed_subscriber(app: &TestApp) -> ConfirmationLinks {
-    let body = "name=le%20guin&email=ursula_le_guin%40gmail.com";
-    let _mock_guard = Mock::given(path("/email"))
-        .and(method("POST"))
-        .respond_with(ResponseTemplate::new(200))
-        .named("Create unconfirmed subscriber")
-        .expect(1)
-        .mount_as_scoped(&app.email_server)
-        .await;
-
-    app.post_subscriptions(body.into())
-        .await
-        .error_for_status()
-        .unwrap();
-
-    let email_request = &app
-        .email_server
-        .received_requests()
-        .await
-        .unwrap()
-        .pop()
-        .unwrap();
-    app.get_confirmation_links(&email_request)
-}
-
-async fn create_confirmed_subscriber(app: &TestApp) {
-    // We can then reuse the same helper and just add
-    // an extra step to actually call the confirmation link!
-    let confirmation_link = create_unconfirmed_subscriber(app).await;
-    reqwest::get(confirmation_link.html)
-        .await
-        .unwrap()
-        .error_for_status()
-        .unwrap();
 }
