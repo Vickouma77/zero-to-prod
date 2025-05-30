@@ -96,7 +96,7 @@ async fn newsletters_returns_400_for_invalid_data() {
 
 #[tokio::test]
 async fn requests_missing_authorization_are_rejected() {
-    //Arrange
+    // Arrange
     let app = spawn_app().await;
 
     let response = reqwest::Client::new()
@@ -104,9 +104,10 @@ async fn requests_missing_authorization_are_rejected() {
         .json(&serde_json::json!({
             "title": "Newsletter title",
             "content": {
-                "text": "Newsletter body as plain text",
-                "html": "<p>Newsletter body as HTML</p>",
-            }
+            "text": "Newsletter body as plain text",
+            "html": "<p>Newsletter body as HTML</p>",
+        }
+
         }))
         .send()
         .await
