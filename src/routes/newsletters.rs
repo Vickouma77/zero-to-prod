@@ -131,7 +131,6 @@ pub async fn publish_newsletter(
     Ok(HttpResponse::Ok().finish())
 }
 
-#[allow(dead_code)]
 struct Credentials {
     username: String,
     password: Secret<String>,
