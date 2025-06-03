@@ -84,6 +84,11 @@ async fn get_confirmed_subscribers(
     Ok(confirmed_subscribers)
 }
 
+#[tracing::instrument(
+    name = "Publish a newsletter issue",
+    skip(body, pool, email_client, request),
+    fields(username=tracing::field::Empty, user_id=tracing::field::Empty)
+)]
 pub async fn publish_newsletter(
     body: web::Json<BodyData>,
     pool: web::Data<PgPool>,
